@@ -29,3 +29,5 @@ class TodoLocators():
 
     list_of_items_by_id = (By.CSS_SELECTOR, '#app > div > section > div > div.b-table > div.table-wrapper > table > tbody > tr > td:nth-child(1)')
     sort_by_id_btn = (By.XPATH, '//*[@id="app"]/div/section/div/div[2]/div[2]/table/thead/tr/th[1]/div')
+    list_of_items_by_todo = (By.CSS_SELECTOR, '#app > div > section > div > div.b-table > div.table-wrapper > table > tbody > tr > td:nth-child(2)')
+    sort_by_todo_btn = (By.XPATH, '//*[@id="app"]/div/section/div/div[2]/div[2]/table/thead/tr/th[2]/div')

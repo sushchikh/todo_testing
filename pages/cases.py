@@ -165,7 +165,7 @@ class DeleteAllTodos(BasePage):
         else:
             print('\ntable is empty')
 
-
+# TODO make right checking, now wrong list  
 class SortById(BasePage):
     def sort_by_id(self):
         """
@@ -212,10 +212,82 @@ class SortById(BasePage):
 
         # checking for sorting by ID (compare with two right lists of indexes)
         list_of_items_by_id = self.browser.find_elements(*TodoLocators.list_of_items_by_id)
+
         test_list_of_id_1 = [x for x in range(1, 11)] # create two lists of indexes
         test_list_of_id_2 = test_list_of_id_1[::-1]
-        if (list_of_items_by_id != test_list_of_id_1) or (list_of_items_by_id != test_list_of_id_2):
-            raise MyError('table has not sorting by IDs')
+        if list_of_items_by_id != test_list_of_id_1:
+            raise MyError('table has not sorting by IDs (ascending)')
         else:
-            print('\nsort by ID work well')
+            print('\nsort by ID work well (ascending)')
+        sort_by_id_btn.click()
+        if list_of_items_by_id != test_list_of_id_2:
+            raise MyError('table has not sorting by IDs (descending)')
+        else:
+            print('\nsort by ID work well (descending)')
+
+
+
+class SortByTodo(BasePage):
+    def sort_by_todo(self, options):
+        """
+        create list of items push it to the table, sort by t.do column few times, check for right sorting
+        """
+        options_for_delete_all = []
+        for i in range(1, options+1):
+            if i % 2 == 0:
+                priority = 'secondary'
+            elif i % 3 == 0:
+                priority = 'meh'
+            else:
+                priority = 'important'
+            options_for_delete_all.append([i, priority])
+
+        # precomposition (make new items):
+        for i in options_for_delete_all:
+            add_a_todo_btn = self.browser.find_element(*TodoLocators.add_a_todo_btn)
+            add_a_todo_btn.click()
+            new_todo_title_input = self.browser.find_element(*TodoLocators.new_todo_title_input)
+            new_todo_title_input.send_keys(i[0])  # name
+            if i[1] == 'secondary':
+                new_todo_priority_select = self.browser.find_element(*TodoLocators.new_todo_priority_secondary_select)
+                new_todo_priority_select.click()
+            if i[1] == 'meh':
+                new_todo_priority_select = self.browser.find_element(*TodoLocators.new_todo_priority_meh_select)
+                new_todo_priority_select.click()
+            if i[1] == 'important':
+                new_todo_priority_select = self.browser.find_element(*TodoLocators.new_todo_priority_important_select)
+                new_todo_priority_select.click()
+            new_todo_save_btn = self.browser.find_element(*TodoLocators.new_todo_save_btn)
+            new_todo_save_btn.click()
+        print('\ncreate few items for mass-delete')
+
+        sleep(1)
+
+
+        # checking for sorting by t0do column:
+        unsorted_list_of_items_by_todo = self.browser.find_element(*TodoLocators.list_of_items_by_todo)
+        sort_by_todo_btn = self.browser.find_element(*TodoLocators.sort_by_todo_btn)
+        test_list_of_id_ascending = [str(x) for x in range(1, options+1)]  # create two lists of indexes
+        test_list_of_id_descending = test_list_of_id_ascending[::-1]
+
+        sort_by_todo_btn.click()
+
+        list_of_items_in_todo_column = self.browser.find_elements(*TodoLocators.list_of_items_by_todo)
+        list_of_text_of_items_in_todo_column = []
+        for i in list_of_items_in_todo_column:
+            list_of_text_of_items_in_todo_column.append(i.text)
+        if list_of_text_of_items_in_todo_column != test_list_of_id_ascending:
+            raise MyError(f'table has not sorting by Todo column (ascending)')
+        else:
+            print('\nsort by ID work well (ascending)')
+        sort_by_todo_btn.click()
+        sleep(3)
+        list_of_items_in_todo_column = self.browser.find_elements(*TodoLocators.list_of_items_by_todo)
+        list_of_text_of_items_in_todo_column = []
+        for i in list_of_items_in_todo_column:
+            list_of_text_of_items_in_todo_column.append(i.text)
+        if list_of_text_of_items_in_todo_column != test_list_of_id_descending:
+            raise MyError(f'table has not sorting by Todo column (descending)')
+        else:
+            print('\nsort by ID work well (descending)')
 
