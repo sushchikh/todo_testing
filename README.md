@@ -44,3 +44,12 @@
 #### Запуск отдельного теста из набора:
 `pytest todo_SPA_test.py::test_func` 
 <br>_где test_func название кейса из списка выше, например: pytest todo_SPA_test.py::test_edit_todo_
+
+
+-----------------------------------------------------------------------
+#### Изменение параметров тестов (файл todo_SPA_test.py)
+Изменение количества создаваемых сущностей:
+`@pytest.mark.parametrize('amount_of_items', [9])` - 9 заменить на желаемое кол-во
+
+Изменение имен и приоритетов создаваемых сущностей:
+`@pytest.mark.parametrize('options', [['do testing', 'meh']])` - do testing - имя, meh - приоритет
