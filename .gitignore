@@ -5,7 +5,7 @@ __pycache__/
 .idea
 # C extensions
 *.so
-/logs
+log_1.txt
 lpt.yaml
 data/
 py_raw/lpt.yaml
